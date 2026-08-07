@@ -13,6 +13,17 @@ base {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/JavierFlores09/zip-bundler")
+            credentials {
+                username = providers.environmentVariable("GITHUB_ACTOR").orNull
+                password = providers.environmentVariable("GITHUB_TOKEN").orNull
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("mavenJava") {
             artifactId = publicationArtifactId

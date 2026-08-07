@@ -4,6 +4,45 @@ A Gradle plugin for packaging resource directories as ZIP files inside a JAR. An
 
 ## Usage
 
+ZIP Bundler is published to GitHub Packages. Add the package repository to `settings.gradle.kts` for both plugin and library resolution:
+
+```kotlin
+pluginManagement {
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/JavierFlores09/zip-bundler")
+            credentials {
+                username = providers.gradleProperty("githubPackagesUsername").orNull
+                password = providers.gradleProperty("githubPackagesToken").orNull
+            }
+        }
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/JavierFlores09/zip-bundler")
+            credentials {
+                username = providers.gradleProperty("githubPackagesUsername").orNull
+                password = providers.gradleProperty("githubPackagesToken").orNull
+            }
+        }
+    }
+}
+```
+
+GitHub Packages requires authentication, including for public packages. Put the credentials in your user-level `~/.gradle/gradle.properties` file, not in the project repository:
+
+```properties
+githubPackagesUsername=<github-username>
+githubPackagesToken=<personal-access-token>
+```
+
+The token must be a classic personal access token with the `read:packages` scope.
+
 ```kotlin
 plugins {
     id("me.javierflores.zipbundler") version "<version>"
@@ -101,8 +140,3 @@ Extraction rejects paths that escape the destination. Existing files are only re
 
 Include the runtime library in the deployed JAR unless the host provides it separately.
 
-## Building
-
-```text
-./gradlew check
-```

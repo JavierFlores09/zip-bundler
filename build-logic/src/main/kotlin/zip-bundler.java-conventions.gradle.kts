@@ -6,7 +6,8 @@ plugins {
 }
 
 group = "me.javierflores"
-version = "0.1.0-SNAPSHOT"
+version = providers.environmentVariable("ZIPBUNDLER_VERSION").orNull
+    ?: throw GradleException("The ZIPBUNDLER_VERSION environment variable must be set.")
 
 repositories {
     mavenCentral()
